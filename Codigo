@@ -1,0 +1,35 @@
+const int sensorNivelAgua = A0;
+const int sensorChuva = A1;
+const int ledAlerta = 13;
+const int buzzer = 12;
+
+const int limiteNivelAgua = 700;
+const int limiteChuva = 600;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(ledAlerta, OUTPUT);
+  pinMode(buzzer, OUTPUT);
+  Serial.println("Sistema de Monitoramento de Enchentes Iniciado.");
+}
+
+void loop() {
+  int leituraNivelAgua = analogRead(sensorNivelAgua);
+  int leituraChuva = analogRead(sensorChuva);
+
+  Serial.print("Nível de água: ");
+  Serial.print(leituraNivelAgua);
+  Serial.print(" | Chuva: ");
+  Serial.println(leituraChuva);
+
+  if (leituraNivelAgua > limiteNivelAgua && leituraChuva > limiteChuva) {
+    digitalWrite(ledAlerta, HIGH);
+    tone(buzzer, 1000);
+    Serial.println("⚠️ ALERTA: Risco de enchente detectado!");
+  } else {
+    digitalWrite(ledAlerta, LOW);
+    noTone(buzzer);
+  }
+
+  delay(2000);
+}
